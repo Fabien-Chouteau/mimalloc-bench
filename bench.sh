@@ -6,7 +6,7 @@
 # Allocators and tests
 # --------------------------------------------------------------------
 
-readonly alloc_all="sys dh ff fg gd hd hm hml iso je lf lp lt mi mi-sec mi2 mi2-sec mng mesh nomesh pa rp sc scudo sg sm sn sn-sec tbb tc tcg mi-dbg mi2-dbg xmi xsmi xmi-dbg"
+readonly alloc_all="sys dh ff fg gd hd hm hml iso je lf lp lt mi mi-sec mi2 mi2-sec mng mesh nomesh pa rp sc scudo sg sm sn sn-sec tbb tc tcg mi-dbg mi2-dbg xmi xsmi xmi-dbg mark"
 readonly alloc_secure="dh ff gd hm hml iso mi-sec mi2-sec mng pa scudo sg sn-sec sg"
 alloc_run=""           # allocators to run (expanded by command line options)
 alloc_installed="sys"  # later expanded to include all installed allocators
@@ -130,6 +130,8 @@ alloc_lib_add "mi-dbg" "$localdevdir/mi/out/debug/libmimalloc-debug$extso"
 alloc_lib_add "mi2"     "$localdevdir/mi2/out/release/libmimalloc$extso"
 alloc_lib_add "mi2-sec" "$localdevdir/mi2/out/secure/libmimalloc-secure$extso"
 alloc_lib_add "mi2-dbg" "$localdevdir/mi2/out/debug/libmimalloc-debug$extso"
+
+alloc_lib_add "mark" "$localdevdir/mark/lib/libmark$extso"
 
 xmidir="$localdevdir/../../mi"
 if ! [ -d "$xmidir" ]; then

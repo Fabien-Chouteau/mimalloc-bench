@@ -63,6 +63,7 @@ readonly version_sn=0.6.2
 readonly version_tbb=v2021.9.0
 readonly version_tc=gperftools-2.15
 readonly version_tcg=8febb4b4da2ab3b04862a8676fb5b506ef90aa42 # 2024-07-30
+readonly version_mark=main
 
 # benchmark versions
 readonly version_redis=6.2.7
@@ -101,6 +102,7 @@ setup_sn=0
 setup_tbb=0
 setup_tc=0
 setup_tcg=0
+setup_mark=0
 
 # bigger benchmarks
 setup_bench=0
@@ -230,6 +232,8 @@ while : ; do
         setup_tc=$flag_arg;;
     tcg)
         setup_tcg=$flag_arg;;
+    mark)
+        setup_mark=$flag_arg;;
     -r|--rebuild)
         rebuild=1;;
     -j=*|--procs=*)
@@ -268,6 +272,7 @@ while : ; do
         echo "  tbb                          setup Intel TBB malloc ($version_tbb)"
         echo "  tc                           setup tcmalloc ($version_tc)"
         echo "  tcg                          setup Google's tcmalloc ($version_tcg)"
+        echo "  mark                         Mark ($version_mark)"
         echo ""
         echo "  bench                        build all local benchmarks"
         echo "  lean                         setup lean 3 benchmark"
@@ -601,6 +606,17 @@ if test "$setup_tcg" = "1"; then
   gawk -i inplace 'f{$0="cc_binary("; f=0} /This library provides tcmalloc always/{f=1} 1' tcmalloc/BUILD # Change the line after "This library…" to cc_binary (instead of cc_library)
   gawk -i inplace '/alwayslink/ && !f{f=1; next} 1' tcmalloc/BUILD # delete only the first instance of "alwayslink"
   bazel build -c opt tcmalloc
+  popd
+fi
+
+if test "$setup_mark" = "1"; then
+  #checkout mark $version_mark https://github.com/ohenley/mark
+  checkout mark $version_mark git@github.com:Fabien-Chouteau/mark.git
+  ORIG=""
+  if test "$darwin" = "1"; then
+    ORIG="_orig"
+  fi
+  alr build --release -- -XLIBRARY_TYPE=relocatable
   popd
 fi
 
